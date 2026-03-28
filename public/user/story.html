@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi tiết truyện - WebTruyenChu</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a href="index.html" class="logo">📖 WebTruyenChu</a>
+      <a href="payment.html" class="nav-vip-btn">👑 VIP</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div id="breadcrumb"></div>
+    <div id="storyDetail"></div>
+    <div class="section-title">📋 Danh sách chương</div>
+    <ul id="chapterList" class="chapter-list"></ul>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <div class="footer-logo">📖 WebTruyenChu</div>
+        <p>Trang đọc truyện online miễn phí.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-heading">Thể loại</div>
+        <ul>
+          <li><a href="index.html?genre=Ti%C3%AAn+Hi%E1%BB%87p">Tiên Hiệp</a></li>
+          <li><a href="index.html?genre=Ng%C3%B4n+T%C3%ACnh">Ngôn Tình</a></li>
+          <li><a href="index.html?genre=Ki%E1%BA%BFm+Hi%E1%BB%87p">Kiếm Hiệp</a></li>
+          <li><a href="index.html?genre=Huy%E1%BB%81n+Huy%E1%BB%85n">Huyền Huyễn</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-heading">Liên kết</div>
+        <ul>
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="payment.html">Nâng cấp VIP</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-heading">🛒 Ủng hộ</div>
+        <div id="footer-shopee-slot"></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 WebTruyenChu. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script>
+    fetch('/ads').then(r => r.json()).then(ads => {
+      const el = document.getElementById('footer-shopee-slot'); if (!el) return;
+      const ad = ads.shopee;
+      el.innerHTML = ad && ad.url ? `<a href="${ad.url}" target="_blank" rel="noopener sponsored" class="shopee-banner">${ad.imageUrl ? `<img src="${ad.imageUrl}" alt="Shopee">` : '🛒 Mua sắm trên Shopee'}</a>` : `<a href="#" class="shopee-banner" style="opacity:0.25">🛒 Shopee (chưa cấu hình)</a>`;
+    }).catch(() => { });
+    const storyId = new URLSearchParams(window.location.search).get('id');
+
+    async function loadStory() {
+      const res = await fetch(`/stories/${storyId}`);
+      const s = await res.json();
+      document.title = s.title + ' - WebTruyenChu';
+      document.getElementById('breadcrumb').innerHTML =
+        `<a href="index.html">Trang chủ</a> › ${s.title}`;
+      document.getElementById('storyDetail').innerHTML = `
+        <div class="story-info">
+          ${s.cover
+          ? `<img src="${s.cover}" alt="${s.title}" class="cover-img" onerror="this.style.display='none'">`
+          : `<div class="cover-img" style="background:linear-gradient(135deg,#1e1e30,#2a2a40);display:flex;align-items:center;justify-content:center;font-size:60px;border-radius:8px">📖</div>`}
+          <div class="story-meta">
+            <h2>${s.title} ${s.isVIP ? '<span class="vip-badge">VIP</span>' : ''}</h2>
+            <p><b>Tác giả:</b> ${s.author || 'Không rõ'}</p>
+            <p><b>Thể loại:</b> ${s.genre || 'Không rõ'}</p>
+            <p><b>Số chương:</b> ${s.totalChapters || 0}</p>
+            <p style="margin-top:12px;color:#bbb">${s.description || ''}</p>
+          </div>
+        </div>`;
+    }
+
+    async function loadChapters() {
+      const res = await fetch(`/chapters?storyId=${storyId}`);
+      const chapters = await res.json();
+      document.getElementById('chapterList').innerHTML = chapters.length
+        ? chapters.map(c => `
+          <li>
+            <a href="chapter.html?id=${c._id}">Chương ${c.number}: ${c.title}</a>
+            ${c.isVIP ? '<span class="vip-badge">VIP</span>' : ''}
+          </li>`).join('')
+        : '<li style="color:#555;padding:16px">Chưa có chương nào.</li>';
+    }
+
+    loadStory();
+    loadChapters();
+  </script>
+</body>
+
+</html>

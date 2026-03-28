@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebTruyenChu - Trang chủ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a href="index.html" class="logo">📖 WebTruyenChu</a>
+      <div class="nav-right">
+        <input type="text" id="searchBox" placeholder="🔍 Tìm kiếm truyện..."
+          onkeydown="if(event.key==='Enter') doSearch()">
+        <select id="genreFilter" onchange="filterByGenre()">
+          <option value="">Tất cả thể loại</option>
+          <option value="Tiên Hiệp">Tiên Hiệp</option>
+          <option value="Ngôn Tình">Ngôn Tình</option>
+          <option value="Kiếm Hiệp">Kiếm Hiệp</option>
+          <option value="Huyền Huyễn">Huyền Huyễn</option>
+          <option value="Đô Thị">Đô Thị</option>
+        </select>
+        <a href="payment.html" class="nav-vip-btn">👑 VIP</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div id="ad-banner-top"></div>
+    <div class="page-title" id="pageTitle">📚 Danh sách truyện</div>
+    <div id="storyList" class="grid"></div>
+    <div id="pagination" class="pagination"></div>
+    <div id="ad-banner-bottom" style="margin-top:24px"></div>
+    <div id="ad-shopee" style="margin-top:12px"></div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <div class="footer-logo">📖 WebTruyenChu</div>
+        <p>Trang đọc truyện online miễn phí. Cập nhật nhanh, kho truyện phong phú từ nhiều thể loại.</p>
+        <div class="footer-social">
+          <a href="#" title="Facebook">📘</a>
+          <a href="#" title="Zalo">💬</a>
+          <a href="#" title="Discord">🎮</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-heading">Thể loại</div>
+        <ul>
+          <li><a href="index.html?genre=Ti%C3%AAn+Hi%E1%BB%87p">Tiên Hiệp</a></li>
+          <li><a href="index.html?genre=Ng%C3%B4n+T%C3%ACnh">Ngôn Tình</a></li>
+          <li><a href="index.html?genre=Ki%E1%BA%BFm+Hi%E1%BB%87p">Kiếm Hiệp</a></li>
+          <li><a href="index.html?genre=Huy%E1%BB%81n+Huy%E1%BB%85n">Huyền Huyễn</a></li>
+          <li><a href="index.html?genre=%C4%90%C3%B4+Th%E1%BB%8B">Đô Thị</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-heading">Liên kết</div>
+        <ul>
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="payment.html">Nâng cấp VIP</a></li>
+          <li><a href="payment.html">Nạp tiền</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-heading">🛒 Ủng hộ</div>
+        <div id="footer-shopee-slot"></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 WebTruyenChu. All rights reserved.</span>
+      <span>Liên hệ: <a href="mailto:contact@webtruyen.com">contact@webtruyen.com</a></span>
+    </div>
+  </footer>
+
+  <script>
+    let currentPage = 1;
+    let currentUrl = '/stories';
+    let cachedStories = [];
+    let cacheKey = '';
+
+    async function loadStories(baseUrl = '/stories', page = 1) {
+      currentUrl = baseUrl;
+      currentPage = page;
+      document.getElementById('storyList').innerHTML = '<div class="empty">Đang tải...</div>';
+      document.getElementById('pagination').innerHTML = '';
+
+      const LIMIT = 10;
+      try {
+        let stories, total, totalPages;
+
+        // Nếu cache còn hợp lệ thì không fetch lại
+        if (cacheKey === baseUrl && cachedStories.length) {
+          total = cachedStories.length;
+          totalPages = Math.ceil(total / LIMIT);
+          stories = cachedStories.slice((page - 1) * LIMIT, page * LIMIT);
+        } else {
+          const sep = baseUrl.includes('?') ? '&' : '?';
+          const res = await fetch(`${baseUrl}${sep}page=${page}&limit=${LIMIT}`);
+          const data = await res.json();
+
+          if (Array.isArray(data)) {
+            // Server trả array — cache lại, phân trang client-side
+            cachedStories = data;
+            cacheKey = baseUrl;
+            total = data.length;
+            totalPages = Math.ceil(total / LIMIT);
+            stories = data.slice((page - 1) * LIMIT, page * LIMIT);
+          } else {
+            // Server hỗ trợ pagination đúng chuẩn
+            cachedStories = [];
+            cacheKey = '';
+            stories = data.stories;
+            total = data.total;
+            totalPages = data.totalPages;
+          }
+        }
+
+        if (!stories.length) {
+          document.getElementById('storyList').innerHTML = '<div class="empty">Không tìm thấy truyện nào.</div>';
+          return;
+        }
+
+        document.getElementById('storyList').innerHTML = stories.map(s => `
+          <div class="story-card" onclick="location.href='story.html?id=${s._id}'">
+            ${s.cover
+            ? `<img src="${s.cover}" alt="${s.title}" onerror="this.outerHTML='<div class=\\'story-card-no-img\\'>📖</div>'">`
+            : `<div class="story-card-no-img">📖</div>`}
+            <div class="story-card-body">
+              <h3><a href="story.html?id=${s._id}">${s.title}</a> ${s.isVIP ? '<span class="vip-badge">VIP</span>' : ''}</h3>
+              <div class="meta">${s.author || ''}${s.genre ? ' · ' + s.genre : ''} · ${s.totalChapters || 0} chương</div>
+              <p>${s.description || ''}</p>
+            </div>
+          </div>`).join('');
+
+        renderPagination(totalPages, page, total);
+      } catch (err) {
+        document.getElementById('storyList').innerHTML = `<div class="empty">Lỗi tải dữ liệu: ${err.message}</div>`;
+      }
+    }
+
+    function renderPagination(totalPages, current, total) {
+      if (totalPages <= 1) return;
+      let html = `<span class="page-info">Tổng ${total} truyện</span>`;
+
+      if (current > 1)
+        html += `<button class="page-btn" onclick="loadStories(currentUrl, ${current - 1})">‹</button>`;
+
+      // Hiện tối đa 5 nút trang
+      let start = Math.max(1, current - 2);
+      let end = Math.min(totalPages, start + 4);
+      if (end - start < 4) start = Math.max(1, end - 4);
+
+      if (start > 1) html += `<button class="page-btn" onclick="loadStories(currentUrl, 1)">1</button><span class="page-dots">…</span>`;
+
+      for (let i = start; i <= end; i++) {
+        html += `<button class="page-btn ${i === current ? 'active' : ''}" onclick="loadStories(currentUrl, ${i})">${i}</button>`;
+      }
+
+      if (end < totalPages) html += `<span class="page-dots">…</span><button class="page-btn" onclick="loadStories(currentUrl, ${totalPages})">${totalPages}</button>`;
+
+      if (current < totalPages)
+        html += `<button class="page-btn" onclick="loadStories(currentUrl, ${current + 1})">›</button>`;
+
+      document.getElementById('pagination').innerHTML = html;
+    }
+
+    function doSearch() {
+      const q = document.getElementById('searchBox').value.trim();
+      cacheKey = ''; cachedStories = [];
+      if (!q) { document.getElementById('pageTitle').textContent = '📚 Danh sách truyện'; loadStories('/stories'); return; }
+      document.getElementById('pageTitle').textContent = `🔍 Kết quả: "${q}"`;
+      loadStories(`/stories/search?q=${encodeURIComponent(q)}`);
+    }
+
+    function filterByGenre() {
+      const genre = document.getElementById('genreFilter').value;
+      cacheKey = ''; cachedStories = [];
+      document.getElementById('pageTitle').textContent = genre ? `📂 Thể loại: ${genre}` : '📚 Danh sách truyện';
+      loadStories(genre ? `/stories?genre=${encodeURIComponent(genre)}` : '/stories');
+    }
+
+    // Ads
+    async function loadAds() {
+      try {
+        const res = await fetch('/ads');
+        if (!res.ok) return;
+        const ads = await res.json();
+
+        const slots = [
+          { id: 'ad-banner-top', key: 'banner_top' },
+          { id: 'ad-banner-bottom', key: 'banner_bottom' },
+          { id: 'ad-shopee', key: 'shopee' },
+        ];
+
+        slots.forEach(({ id, key }) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          const ad = ads[key];
+          if (ad && ad.url) {
+            const img = ad.imageUrl ? `<img src="${ad.imageUrl}" alt="QC">` : (key === 'shopee' ? '🛒 Mua sắm trên Shopee' : '📢 Quảng cáo');
+            el.innerHTML = `<a href="${ad.url}" target="_blank" rel="noopener sponsored" class="${key === 'shopee' ? 'shopee-banner' : 'ad-banner'}">${img}</a>`;
+          } else {
+            // Placeholder khi chưa có link
+            el.innerHTML = key === 'shopee'
+              ? `<a href="http://localhost:5000/admin.html" class="shopee-banner" style="opacity:0.3">🛒 [Chưa cấu hình Shopee - vào Admin để thêm link]</a>`
+              : `<div class="ad-placeholder">[Vị trí quảng cáo - ${key}]</div>`;
+          }
+        });
+      } catch { }
+    }
+
+    // Load genre từ URL nếu có (?genre=...)
+    const urlGenre = new URLSearchParams(window.location.search).get('genre');
+    if (urlGenre) {
+      document.getElementById('genreFilter').value = urlGenre;
+      document.getElementById('pageTitle').textContent = `📂 Thể loại: ${urlGenre}`;
+      loadStories(`/stories?genre=${encodeURIComponent(urlGenre)}`);
+    } else {
+      loadStories();
+    }
+    loadAds();
+
+    // Footer shopee
+    fetch('/ads').then(r => r.json()).then(ads => {
+      const el = document.getElementById('footer-shopee-slot');
+      if (!el) return;
+      const ad = ads.shopee;
+      el.innerHTML = ad && ad.url
+        ? `<a href="${ad.url}" target="_blank" rel="noopener sponsored" class="shopee-banner">${ad.imageUrl ? `<img src="${ad.imageUrl}" alt="Shopee">` : '🛒 Mua sắm trên Shopee'}</a>`
+        : `<a href="#" class="shopee-banner" style="opacity:0.25">🛒 Shopee (chưa cấu hình)</a>`;
+    }).catch(() => { });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đọc chương - WebTruyenChu</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a href="index.html" class="logo">📖 WebTruyenChu</a>
+      <a href="payment.html" class="nav-vip-btn">👑 VIP</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div id="breadcrumb"></div>
+
+    <div class="chapter-reader">
+      <div id="chapterContent"></div>
+    </div>
+
+    <div id="chapterNav"></div>
+
+    <div id="ad-sidebar" style="margin:16px 0"></div>
+
+    <div class="comments-section">
+      <h3>💬 Bình luận</h3>
+      <div id="commentList"></div>
+      <div class="comment-form">
+        <textarea id="commentInput" placeholder="Viết bình luận của bạn..." rows="3"></textarea>
+        <button onclick="postComment()">Gửi bình luận</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <div class="footer-logo">📖 WebTruyenChu</div>
+        <p>Trang đọc truyện online miễn phí.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-heading">Thể loại</div>
+        <ul>
+          <li><a href="index.html?genre=Ti%C3%AAn+Hi%E1%BB%87p">Tiên Hiệp</a></li>
+          <li><a href="index.html?genre=Ng%C3%B4n+T%C3%ACnh">Ngôn Tình</a></li>
+          <li><a href="index.html?genre=Ki%E1%BA%BFm+Hi%E1%BB%87p">Kiếm Hiệp</a></li>
+          <li><a href="index.html?genre=Huy%E1%BB%81n+Huy%E1%BB%85n">Huyền Huyễn</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-heading">Liên kết</div>
+        <ul>
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="payment.html">Nâng cấp VIP</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-heading">🛒 Ủng hộ</div>
+        <div id="footer-shopee-slot"></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 WebTruyenChu. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script>
+    const chapterId = new URLSearchParams(window.location.search).get('id');
+    let currentChapter, chapters;
+
+    async function loadChapter() {
+      const res = await fetch(`/chapters/${chapterId}`);
+      currentChapter = await res.json();
+      document.title = currentChapter.title + ' - WebTruyenChu';
+
+      document.getElementById('chapterContent').innerHTML = `
+        <h2>${currentChapter.title}</h2>
+        <div class="chapter-body">${currentChapter.content.replace(/\n/g, '<br>')}</div>`;
+
+      const storyRes = await fetch(`/stories/${currentChapter.storyId}`);
+      const story = await storyRes.json();
+      document.getElementById('breadcrumb').innerHTML =
+        `<a href="index.html">Trang chủ</a> › <a href="story.html?id=${story._id}">${story.title}</a> › ${currentChapter.title}`;
+
+      await loadChapterNav();
+    }
+
+    async function loadChapterNav() {
+      const res = await fetch(`/chapters?storyId=${currentChapter.storyId}`);
+      chapters = await res.json();
+      const idx = chapters.findIndex(c => c._id === currentChapter._id);
+      let nav = '';
+      if (idx > 0)
+        nav += `<a href="chapter.html?id=${chapters[idx - 1]._id}">← Chương trước</a>`;
+      nav += `<a href="story.html?id=${currentChapter.storyId}">☰ Mục lục</a>`;
+      if (idx < chapters.length - 1)
+        nav += `<a href="chapter.html?id=${chapters[idx + 1]._id}">Chương tiếp →</a>`;
+      document.getElementById('chapterNav').innerHTML = nav;
+    }
+
+    async function loadComments() {
+      const res = await fetch(`/chapters/${chapterId}/comments`);
+      const comments = await res.json();
+      document.getElementById('commentList').innerHTML = comments.length
+        ? comments.map(c => `
+          <div class="comment">
+            <div class="comment-header">
+              <b>${c.userId?.username || 'Ẩn danh'}</b>
+              <span class="comment-time">${new Date(c.createdAt).toLocaleString('vi-VN')}</span>
+            </div>
+            <p>${c.content}</p>
+          </div>`).join('')
+        : '<p class="no-comment">Chưa có bình luận nào. Hãy là người đầu tiên!</p>';
+    }
+
+    async function postComment() {
+      const content = document.getElementById('commentInput').value.trim();
+      if (!content) return;
+      await fetch('/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chapterId, content })
+      });
+      document.getElementById('commentInput').value = '';
+      loadComments();
+    }
+
+    loadChapter();
+    loadComments();
+
+    async function loadAds() {
+      try {
+        const res = await fetch('/ads');
+        const ads = await res.json();
+        if (ads.sidebar && ads.sidebar.url) {
+          document.getElementById('ad-sidebar').innerHTML =
+            `<a href="${ads.sidebar.url}" target="_blank" rel="noopener" class="ad-banner">
+              ${ads.sidebar.imageUrl ? `<img src="${ads.sidebar.imageUrl}" alt="Quảng cáo">` : '📢 Quảng cáo'}
+            </a>`;
+        }
+      } catch { }
+    }
+    loadAds();
+
+    fetch('/ads').then(r => r.json()).then(ads => {
+      const el = document.getElementById('footer-shopee-slot'); if (!el) return;
+      const ad = ads.shopee;
+      el.innerHTML = ad && ad.url ? `<a href="${ad.url}" target="_blank" rel="noopener sponsored" class="shopee-banner">${ad.imageUrl ? `<img src="${ad.imageUrl}" alt="Shopee">` : '🛒 Mua sắm trên Shopee'}</a>` : `<a href="#" class="shopee-banner" style="opacity:0.25">🛒 Shopee (chưa cấu hình)</a>`;
+    }).catch(() => { });
+  </script>
+</body>
+
+</html>
