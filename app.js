@@ -19,15 +19,18 @@ app.use('/users', require('./routers/userRoutes'));
 app.use('/payment', require('./routers/paymentRoutes'));
 app.use('/ads', require('./routers/adRoutes'));
 
-// Fallback: /admin -> admin.html
+// /admin -> admin.html
 app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/admin/admin.html'));
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server chạy tại http://localhost:${PORT}`);
-    console.log(`Admin tại http://localhost:${PORT}/admin`);
-});
+// Chỉ listen khi chạy local, không listen trên Vercel
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server chạy tại http://localhost:${PORT}`);
+        console.log(`Admin tại http://localhost:${PORT}/admin`);
+    });
+}
 
 module.exports = app;
