@@ -1,0 +1,12 @@
+{
+    "name": "web-truyen-admin",
+    "version": "1.0.0",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js",
+        "dev": "node app.js"
+    },
+    "dependencies": {
+        "express": "^5.2.1"
+    }
+}
