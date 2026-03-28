@@ -12,7 +12,10 @@
   <header>
     <nav>
       <a href="index.html" class="logo">📖 WebTruyenChu</a>
-      <a href="payment.html" class="nav-vip-btn">👑 VIP</a>
+      <div class="nav-right">
+        <a href="payment.html" class="nav-vip-btn">👑 VIP</a>
+        <div id="navUser"></div>
+      </div>
     </nav>
   </header>
 
@@ -74,13 +77,25 @@
     let currentChapter, chapters;
 
     async function loadChapter() {
-      const res = await fetch(`/chapters/${chapterId}`);
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      const headers = user ? { 'x-user-id': user._id } : {};
+      const res = await fetch(`/chapters/${chapterId}`, { headers });
       currentChapter = await res.json();
       document.title = currentChapter.title + ' - WebTruyenChu';
 
+      const contentHtml = currentChapter.content.replace(/\n/g, '<br>');
+
       document.getElementById('chapterContent').innerHTML = `
         <h2>${currentChapter.title}</h2>
-        <div class="chapter-body">${currentChapter.content.replace(/\n/g, '<br>')}</div>`;
+        <div class="chapter-body ${currentChapter.isLocked ? 'chapter-locked' : ''}">${contentHtml}</div>
+        ${currentChapter.isLocked ? `
+        <div class="vip-gate">
+          <div class="vip-gate-icon">👑</div>
+          <div class="vip-gate-title">Chương VIP</div>
+          <p>Nâng cấp VIP để đọc toàn bộ nội dung chương này và tất cả chương VIP khác.</p>
+          <a href="payment.html" class="vip-gate-btn">⭐ Nâng cấp VIP ngay</a>
+          ${!user ? `<a href="auth.html" class="vip-gate-login">Đã có tài khoản? Đăng nhập</a>` : ''}
+        </div>` : ''}`;
 
       const storyRes = await fetch(`/stories/${currentChapter.storyId}`);
       const story = await storyRes.json();
@@ -146,6 +161,21 @@
       } catch { }
     }
     loadAds();
+
+    // Nav user
+    const _u = JSON.parse(localStorage.getItem('user') || 'null');
+    document.getElementById('navUser').innerHTML = _u
+      ? `<a href="profile.html" class="nav-user-btn">👤 ${_u.username}</a>`
+      : `<a href="auth.html" class="nav-user-btn">Đăng nhập</a>`;
+
+    // Lưu lịch sử đọc
+    if (_u) {
+      fetch(`/users/${_u._id}/history`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chapterId })
+      }).catch(() => { });
+    }
 
     fetch('/ads').then(r => r.json()).then(ads => {
       const el = document.getElementById('footer-shopee-slot'); if (!el) return;

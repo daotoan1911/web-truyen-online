@@ -22,13 +22,13 @@
         }
 
         .payment-card.vip-card {
-            border-color: #ffd200;
-            box-shadow: 0 0 20px rgba(255, 210, 0, 0.15);
+            border-color: #ffd20066;
+            box-shadow: 0 0 20px rgba(255, 210, 0, .1);
         }
 
         .payment-card.donate-card {
-            border-color: #e94560;
-            box-shadow: 0 0 20px rgba(233, 69, 96, 0.15);
+            border-color: #e9456066;
+            box-shadow: 0 0 20px rgba(233, 69, 96, .1);
         }
 
         .card-icon {
@@ -47,7 +47,20 @@
             font-size: 14px;
             color: #888;
             line-height: 1.7;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+        }
+
+        .vip-price {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffd200;
+            margin-bottom: 4px;
+        }
+
+        .vip-price-sub {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 16px;
         }
 
         .vip-perks {
@@ -59,27 +72,25 @@
             font-size: 14px;
             color: #ccc;
             padding: 5px 0;
-            border-bottom: none;
-            background: none;
         }
 
         .vip-perks li::before {
             content: '✅ ';
         }
 
-        .payment-form {
+        .pform {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
-        .payment-form label {
+        .pform label {
             font-size: 13px;
             font-weight: 600;
             color: #aaa;
         }
 
-        .payment-form input {
+        .pform input {
             padding: 10px 14px;
             background: #0f0f1a;
             border: 1px solid #333;
@@ -87,10 +98,10 @@
             color: #e0e0e0;
             font-size: 14px;
             outline: none;
-            transition: border 0.2s;
+            transition: border .2s;
         }
 
-        .payment-form input:focus {
+        .pform input:focus {
             border-color: #e94560;
         }
 
@@ -108,7 +119,7 @@
             border-radius: 20px;
             cursor: pointer;
             font-size: 13px;
-            transition: all 0.2s;
+            transition: all .2s;
         }
 
         .preset-btn:hover,
@@ -119,7 +130,7 @@
         }
 
         .btn-vip {
-            padding: 12px;
+            padding: 13px;
             background: linear-gradient(135deg, #f7971e, #ffd200);
             color: #333;
             border: none;
@@ -127,16 +138,22 @@
             cursor: pointer;
             font-size: 15px;
             font-weight: 800;
-            transition: opacity 0.2s;
+            transition: opacity .2s;
             margin-top: 4px;
+            width: 100%;
         }
 
         .btn-vip:hover {
-            opacity: 0.85;
+            opacity: .85;
+        }
+
+        .btn-vip:disabled {
+            opacity: .4;
+            cursor: not-allowed;
         }
 
         .btn-donate {
-            padding: 12px;
+            padding: 13px;
             background: #e94560;
             color: #fff;
             border: none;
@@ -144,8 +161,9 @@
             cursor: pointer;
             font-size: 15px;
             font-weight: 800;
-            transition: background 0.2s;
+            transition: background .2s;
             margin-top: 4px;
+            width: 100%;
         }
 
         .btn-donate:hover {
@@ -153,11 +171,12 @@
         }
 
         .result-box {
-            margin-top: 14px;
+            margin-top: 12px;
             padding: 12px 16px;
             border-radius: 8px;
             font-size: 14px;
             display: none;
+            line-height: 1.5;
         }
 
         .result-box.success {
@@ -174,52 +193,85 @@
             display: block;
         }
 
-        .user-info-box {
+        .user-bar {
             background: #1a1a2e;
             border: 1px solid #2a2a40;
             border-radius: 12px;
-            padding: 20px 24px;
+            padding: 18px 24px;
             display: flex;
             align-items: center;
             gap: 16px;
+            margin-bottom: 8px;
         }
 
-        .user-avatar {
-            width: 52px;
-            height: 52px;
+        .user-bar .avatar {
+            width: 46px;
+            height: 46px;
             background: linear-gradient(135deg, #e94560, #c73652);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 20px;
             flex-shrink: 0;
         }
 
-        .user-details {
+        .user-bar .info {
             flex: 1;
         }
 
-        .user-details .name {
+        .user-bar .name {
             font-size: 16px;
             font-weight: 700;
             color: #fff;
         }
 
-        .user-details .email {
-            font-size: 13px;
-            color: #666;
+        .user-bar .balance-row {
+            font-size: 14px;
+            color: #ffd200;
+            font-weight: 600;
             margin-top: 2px;
         }
 
-        .user-details .balance {
-            font-size: 14px;
-            color: #ffd200;
-            margin-top: 4px;
-            font-weight: 600;
+        .vip-status-active {
+            font-size: 13px;
+            color: #4caf50;
+            margin-top: 2px;
         }
 
-        @media (max-width: 640px) {
+        .vip-status-none {
+            font-size: 13px;
+            color: #555;
+            margin-top: 2px;
+        }
+
+        .login-prompt {
+            background: #1a1a2e;
+            border: 1px solid #2a2a40;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .login-prompt p {
+            color: #aaa;
+            margin-bottom: 14px;
+        }
+
+        .login-prompt a {
+            color: #e94560;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #2a2a40;
+            margin: 16px 0;
+        }
+
+        @media(max-width:640px) {
             .payment-grid {
                 grid-template-columns: 1fr;
             }
@@ -232,7 +284,7 @@
         <nav>
             <a href="index.html" class="logo">📖 WebTruyenChu</a>
             <div class="nav-right">
-                <a href="index.html" style="color:#aaa;text-decoration:none;font-size:14px">← Trang chủ</a>
+                <div id="navUser"></div>
             </div>
         </nav>
     </header>
@@ -240,74 +292,48 @@
     <div class="container">
         <div class="page-title">💳 Nạp tiền & Nâng cấp VIP</div>
 
-        <!-- User info -->
-        <div class="user-info-box" id="userInfoBox" style="display:none;margin-bottom:24px">
-            <div class="user-avatar">👤</div>
-            <div class="user-details">
-                <div class="name" id="uName"></div>
-                <div class="email" id="uEmail"></div>
-                <div class="balance" id="uBalance"></div>
-            </div>
-            <div id="uVipStatus"></div>
-        </div>
-
-        <!-- Login prompt -->
-        <div id="loginPrompt"
-            style="background:#1a1a2e;border:1px solid #2a2a40;border-radius:12px;padding:24px;margin-bottom:24px;text-align:center">
-            <p style="color:#aaa;margin-bottom:16px">Bạn cần đăng nhập để sử dụng tính năng này.</p>
-            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-                <input type="email" id="loginEmail" placeholder="Email"
-                    style="padding:9px 14px;background:#0f0f1a;border:1px solid #333;border-radius:6px;color:#e0e0e0;font-size:14px;outline:none;width:200px">
-                <input type="password" id="loginPassword" placeholder="Mật khẩu"
-                    style="padding:9px 14px;background:#0f0f1a;border:1px solid #333;border-radius:6px;color:#e0e0e0;font-size:14px;outline:none;width:200px">
-                <button onclick="doLogin()"
-                    style="padding:9px 20px;background:#e94560;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700">Đăng
-                    nhập</button>
-            </div>
-            <div id="loginError" style="color:#e94560;font-size:13px;margin-top:10px"></div>
-        </div>
+        <!-- User info bar -->
+        <div id="userBar"></div>
 
         <div class="payment-grid">
-            <!-- VIP CARD -->
+            <!-- DONATE -->
+            <div class="payment-card donate-card">
+                <div class="card-icon">💰</div>
+                <div class="card-title">Nạp tiền vào ví</div>
+                <div class="card-desc">Nạp tiền vào số dư tài khoản. Dùng để mua VIP hoặc ủng hộ tác giả.</div>
+                <hr class="divider">
+                <div class="pform">
+                    <label>Chọn số tiền</label>
+                    <div class="amount-presets">
+                        <button class="preset-btn" onclick="setAmount(10000,this)">10.000</button>
+                        <button class="preset-btn" onclick="setAmount(20000,this)">20.000</button>
+                        <button class="preset-btn" onclick="setAmount(50000,this)">50.000</button>
+                        <button class="preset-btn" onclick="setAmount(100000,this)">100.000</button>
+                        <button class="preset-btn" onclick="setAmount(200000,this)">200.000</button>
+                    </div>
+                    <label>Hoặc nhập số tiền (VNĐ)</label>
+                    <input type="number" id="donateAmount" placeholder="Nhập số tiền..." min="1000">
+                    <button class="btn-donate" onclick="donate()">💸 Nạp tiền ngay</button>
+                    <div class="result-box" id="donateResult"></div>
+                </div>
+            </div>
+
+            <!-- VIP -->
             <div class="payment-card vip-card">
                 <div class="card-icon">👑</div>
                 <div class="card-title">Thành viên VIP</div>
-                <div class="card-desc">Nâng cấp tài khoản để trải nghiệm đầy đủ tính năng cao cấp.</div>
+                <div class="vip-price">50.000 VNĐ</div>
+                <div class="vip-price-sub">/ 30 ngày · Gia hạn tự động cộng thêm 30 ngày</div>
                 <ul class="vip-perks">
                     <li>Đọc tất cả chương VIP</li>
                     <li>Không quảng cáo</li>
                     <li>Ưu tiên cập nhật chương mới</li>
                     <li>Huy hiệu VIP đặc biệt</li>
                 </ul>
-                <div class="payment-form">
-                    <label>User ID của bạn</label>
-                    <input type="text" id="vipUserId" placeholder="Paste User ID vào đây...">
-                    <button class="btn-vip" onclick="upgradeVIP()">⭐ Nâng cấp VIP ngay</button>
-                    <div class="result-box" id="vipResult"></div>
-                </div>
-            </div>
-
-            <!-- DONATE CARD -->
-            <div class="payment-card donate-card">
-                <div class="card-icon">💰</div>
-                <div class="card-title">Nạp tiền / Donate</div>
-                <div class="card-desc">Nạp tiền vào tài khoản để ủng hộ tác giả và mở khóa nội dung.</div>
-                <div class="payment-form">
-                    <label>User ID của bạn</label>
-                    <input type="text" id="donateUserId" placeholder="Paste User ID vào đây...">
-                    <label>Chọn số tiền (VNĐ)</label>
-                    <div class="amount-presets">
-                        <button class="preset-btn" onclick="setAmount(10000, this)">10.000</button>
-                        <button class="preset-btn" onclick="setAmount(20000, this)">20.000</button>
-                        <button class="preset-btn" onclick="setAmount(50000, this)">50.000</button>
-                        <button class="preset-btn" onclick="setAmount(100000, this)">100.000</button>
-                        <button class="preset-btn" onclick="setAmount(200000, this)">200.000</button>
-                    </div>
-                    <label>Hoặc nhập số tiền</label>
-                    <input type="number" id="donateAmount" placeholder="Nhập số tiền..." min="1000">
-                    <button class="btn-donate" onclick="donate()">💸 Nạp tiền ngay</button>
-                    <div class="result-box" id="donateResult"></div>
-                </div>
+                <hr class="divider">
+                <div class="card-desc" id="vipBalanceHint" style="color:#ffd200"></div>
+                <button class="btn-vip" id="vipBtn" onclick="upgradeVIP()">⭐ Mua VIP bằng số dư ví</button>
+                <div class="result-box" id="vipResult"></div>
             </div>
         </div>
     </div>
@@ -316,37 +342,38 @@
         let currentUser = JSON.parse(localStorage.getItem('user') || 'null');
 
         function initPage() {
-            if (currentUser) {
-                document.getElementById('loginPrompt').style.display = 'none';
-                document.getElementById('userInfoBox').style.display = 'flex';
-                document.getElementById('uName').textContent = currentUser.username;
-                document.getElementById('uEmail').textContent = currentUser.email;
-                document.getElementById('uBalance').textContent = '💰 Số dư: ' + (currentUser.balance || 0).toLocaleString('vi-VN') + ' VNĐ';
-                document.getElementById('uVipStatus').innerHTML = currentUser.isVIP
-                    ? '<span class="vip-badge" style="font-size:13px;padding:4px 10px">👑 VIP</span>'
-                    : '<span style="color:#666;font-size:13px">Chưa VIP</span>';
-                document.getElementById('vipUserId').value = currentUser._id;
-                document.getElementById('donateUserId').value = currentUser._id;
-            }
-        }
+            const navEl = document.getElementById('navUser');
+            navEl.innerHTML = currentUser
+                ? `<a href="profile.html" class="nav-user-btn">👤 ${currentUser.username}</a>`
+                : `<a href="auth.html" class="nav-user-btn">Đăng nhập</a>`;
 
-        async function doLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            document.getElementById('loginError').textContent = '';
-            try {
-                const res = await fetch('/users/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                if (!res.ok) { document.getElementById('loginError').textContent = await res.text(); return; }
-                const data = await res.json();
-                currentUser = data.user;
-                localStorage.setItem('user', JSON.stringify(currentUser));
-                initPage();
-            } catch {
-                document.getElementById('loginError').textContent = 'Lỗi kết nối server.';
+            if (currentUser) {
+                const expiry = currentUser.vipExpiry ? new Date(currentUser.vipExpiry) : null;
+                const isActive = currentUser.isVIP && expiry && expiry > new Date();
+                document.getElementById('userBar').innerHTML = `
+          <div class="user-bar">
+            <div class="avatar">👤</div>
+            <div class="info">
+              <div class="name">${currentUser.username} ${isActive ? '<span class="vip-badge">👑 VIP</span>' : ''}</div>
+              <div class="balance-row">💰 Số dư: ${(currentUser.balance || 0).toLocaleString('vi-VN')} VNĐ</div>
+              ${isActive
+                        ? `<div class="vip-status-active">✅ VIP đến: ${expiry.toLocaleDateString('vi-VN')}</div>`
+                        : `<div class="vip-status-none">Chưa có VIP</div>`}
+            </div>
+          </div>`;
+                // Hint số dư
+                const bal = currentUser.balance || 0;
+                document.getElementById('vipBalanceHint').textContent =
+                    bal >= 50000
+                        ? `✅ Số dư đủ (${bal.toLocaleString('vi-VN')} VNĐ). Nhấn mua để kích hoạt ngay.`
+                        : `⚠️ Số dư hiện tại: ${bal.toLocaleString('vi-VN')} VNĐ. Cần nạp thêm ${(50000 - bal).toLocaleString('vi-VN')} VNĐ.`;
+                document.getElementById('vipBtn').disabled = bal < 50000;
+            } else {
+                document.getElementById('userBar').innerHTML = `
+          <div class="login-prompt">
+            <p>Bạn cần <a href="auth.html">đăng nhập</a> để nạp tiền và mua VIP.</p>
+          </div>`;
+                document.getElementById('vipBtn').disabled = true;
             }
         }
 
@@ -356,60 +383,64 @@
             btn.classList.add('active');
         }
 
-        async function upgradeVIP() {
-            const userId = document.getElementById('vipUserId').value.trim();
-            const box = document.getElementById('vipResult');
-            if (!userId) { showResult(box, 'Vui lòng nhập User ID.', false); return; }
-            try {
-                const res = await fetch('/payment/vip', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId })
-                });
-                if (!res.ok) { showResult(box, await res.text(), false); return; }
-                const data = await res.json();
-                if (currentUser && currentUser._id === userId) {
-                    currentUser.isVIP = true;
-                    localStorage.setItem('user', JSON.stringify(currentUser));
-                    initPage();
-                }
-                showResult(box, '👑 ' + data.message, true);
-            } catch {
-                showResult(box, 'Lỗi kết nối server.', false);
-            }
-        }
-
         async function donate() {
-            const userId = document.getElementById('donateUserId').value.trim();
+            if (!currentUser) { location.href = 'auth.html'; return; }
             const amount = parseInt(document.getElementById('donateAmount').value);
             const box = document.getElementById('donateResult');
-            if (!userId) { showResult(box, 'Vui lòng nhập User ID.', false); return; }
-            if (!amount || amount < 1000) { showResult(box, 'Số tiền tối thiểu là 1.000 VNĐ.', false); return; }
+            if (!amount || amount < 1000) { showResult(box, 'Số tiền tối thiểu 1.000 VNĐ.', false); return; }
             try {
                 const res = await fetch('/payment/donate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId, amount })
+                    body: JSON.stringify({ userId: currentUser._id, amount })
                 });
-                if (!res.ok) { showResult(box, await res.text(), false); return; }
                 const data = await res.json();
-                if (currentUser && currentUser._id === userId) {
-                    currentUser.balance = data.balance;
-                    localStorage.setItem('user', JSON.stringify(currentUser));
-                    document.getElementById('uBalance').textContent = '💰 Số dư: ' + data.balance.toLocaleString('vi-VN') + ' VNĐ';
-                }
-                showResult(box, '💸 ' + data.message + ' | Số dư: ' + data.balance.toLocaleString('vi-VN') + ' VNĐ', true);
-            } catch {
-                showResult(box, 'Lỗi kết nối server.', false);
-            }
+                if (!res.ok) { showResult(box, data.message || await res.text(), false); return; }
+                currentUser.balance = data.balance;
+                localStorage.setItem('user', JSON.stringify(currentUser));
+                showResult(box, `✅ ${data.message}`, true);
+                initPage();
+            } catch { showResult(box, 'Lỗi kết nối server.', false); }
         }
 
-        function showResult(box, msg, success) {
+        async function upgradeVIP() {
+            if (!currentUser) { location.href = 'auth.html'; return; }
+            const box = document.getElementById('vipResult');
+            try {
+                const res = await fetch('/payment/vip', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: currentUser._id })
+                });
+                const data = await res.json();
+                if (!res.ok) { showResult(box, data.message || 'Lỗi.', false); return; }
+                currentUser = { ...currentUser, ...data.user };
+                localStorage.setItem('user', JSON.stringify(currentUser));
+                showResult(box, `👑 ${data.message}`, true);
+                initPage();
+            } catch { showResult(box, 'Lỗi kết nối server.', false); }
+        }
+
+        function showResult(box, msg, ok) {
             box.textContent = msg;
-            box.className = 'result-box ' + (success ? 'success' : 'error');
+            box.className = 'result-box ' + (ok ? 'success' : 'error');
         }
 
-        initPage();
+        // Fetch fresh user data
+        async function refreshUser() {
+            if (!currentUser) return;
+            try {
+                const res = await fetch(`/users/${currentUser._id}`);
+                if (res.ok) {
+                    const u = await res.json();
+                    currentUser = { ...currentUser, ...u };
+                    localStorage.setItem('user', JSON.stringify(currentUser));
+                }
+            } catch { }
+            initPage();
+        }
+
+        refreshUser();
     </script>
 </body>
 

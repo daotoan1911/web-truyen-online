@@ -89,6 +89,24 @@ header nav {
   opacity: 0.85;
 }
 
+.nav-user-btn {
+  padding: 7px 14px;
+  background: #1a1a2e;
+  color: #ccc;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 20px;
+  text-decoration: none;
+  border: 1px solid #2a2a40;
+  white-space: nowrap;
+  transition: all .2s;
+}
+
+.nav-user-btn:hover {
+  border-color: #e94560;
+  color: #e94560;
+}
+
 /* ===== CONTAINER ===== */
 .container {
   max-width: 1100px;
@@ -667,4 +685,70 @@ header nav {
   .footer-inner {
     grid-template-columns: 1fr;
   }
+}
+
+/* ===== VIP GATE ===== */
+.chapter-locked {
+  max-height: 160px;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, #d0d0d0 40%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #d0d0d0 40%, transparent 100%);
+  pointer-events: none;
+  user-select: none;
+}
+
+.vip-gate {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  border: 1px solid #ffd20055;
+  border-radius: 12px;
+  padding: 32px 24px;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.vip-gate-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.vip-gate-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffd200;
+  margin-bottom: 8px;
+}
+
+.vip-gate p {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.vip-gate-btn {
+  display: inline-block;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #f7971e, #ffd200);
+  color: #333;
+  font-weight: 800;
+  font-size: 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: opacity .2s;
+}
+
+.vip-gate-btn:hover {
+  opacity: .85;
+}
+
+.vip-gate-login {
+  display: block;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #e94560;
+  text-decoration: none;
+}
+
+.vip-gate-login:hover {
+  text-decoration: underline;
 }

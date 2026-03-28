@@ -18,6 +18,26 @@ exports.getChapterById = async (req, res) => {
   try {
     const chapter = await Chapter.findById(req.params.id);
     if (!chapter) return res.status(404).send('Không tìm thấy chương');
+
+    // Nếu chương VIP, kiểm tra user
+    if (chapter.isVIP) {
+      const userId = req.headers['x-user-id'];
+      let isVIP = false;
+      if (userId) {
+        const User = require('../models/User');
+        const user = await User.findById(userId).select('isVIP');
+        isVIP = user?.isVIP || false;
+      }
+      if (!isVIP) {
+        // Trả về preview 200 ký tự đầu
+        return res.json({
+          ...chapter.toObject(),
+          content: chapter.content.slice(0, 200) + '...',
+          isLocked: true
+        });
+      }
+    }
+
     res.json(chapter);
   } catch (err) {
     res.status(500).send(err.message);

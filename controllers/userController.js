@@ -32,8 +32,12 @@ exports.login = async (req, res) => {
 // Lấy thông tin user theo ID
 exports.getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select('-passwordHash');
+    let user = await User.findById(req.params.id).select('-passwordHash');
     if (!user) return res.status(404).send('Không tìm thấy user');
+    // Tự động thu hồi VIP hết hạn
+    if (user.isVIP && user.vipExpiry && user.vipExpiry < new Date()) {
+      user = await User.findByIdAndUpdate(req.params.id, { isVIP: false }, { new: true }).select('-passwordHash');
+    }
     res.json(user);
   } catch (err) {
     res.status(500).send(err.message);

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang cá nhân - WebTruyenChu</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .profile-card {
+            background: #1a1a2e;
+            border: 1px solid #2a2a40;
+            border-radius: 12px;
+            padding: 28px;
+            text-align: center;
+            position: sticky;
+            top: 80px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #e94560, #c73652);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 16px;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .profile-email {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 14px;
+        }
+
+        .profile-badges {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .badge-vip {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            color: #333;
+        }
+
+        .badge-normal {
+            background: #2a2a40;
+            color: #888;
+        }
+
+        .profile-balance {
+            font-size: 14px;
+            color: #ffd200;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .profile-actions a,
+        .profile-actions button {
+            display: block;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: all .2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-vip-upgrade {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            color: #333;
+        }
+
+        .btn-vip-upgrade:hover {
+            opacity: .85;
+        }
+
+        .btn-logout {
+            background: #2a2a40;
+            color: #aaa;
+            border: 1px solid #333 !important;
+        }
+
+        .btn-logout:hover {
+            border-color: #e94560 !important;
+            color: #e94560;
+        }
+
+        .profile-section {
+            background: #1a1a2e;
+            border: 1px solid #2a2a40;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .section-head {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a2a40;
+        }
+
+        .history-list {
+            list-style: none;
+        }
+
+        .history-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #1e1e30;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: none;
+        }
+
+        .history-list li a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .history-list li a:hover {
+            color: #e94560;
+        }
+
+        .history-list li .story-name {
+            font-size: 12px;
+            color: #555;
+        }
+
+        .empty-state {
+            color: #555;
+            font-size: 14px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 640px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card {
+                position: static;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">📖 WebTruyenChu</a>
+            <div class="nav-right">
+                <a href="payment.html" class="nav-vip-btn">👑 VIP</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div id="breadcrumb"><a href="index.html">Trang chủ</a> › Trang cá nhân</div>
+
+        <div class="profile-layout">
+            <!-- Sidebar -->
+            <div class="profile-card">
+                <div class="avatar" id="avatarEl">👤</div>
+                <div class="profile-name" id="profileName">...</div>
+                <div class="profile-email" id="profileEmail"></div>
+                <div class="profile-badges" id="profileBadges"></div>
+                <div class="profile-balance" id="profileBalance"></div>
+                <div class="profile-actions">
+                    <a href="payment.html" class="btn-vip-upgrade" id="vipBtn">⭐ Nâng cấp VIP</a>
+                    <button class="btn-logout" onclick="logout()">🚪 Đăng xuất</button>
+                </div>
+            </div>
+
+            <!-- Main -->
+            <div>
+                <div class="profile-section">
+                    <div class="section-head">📖 Lịch sử đọc</div>
+                    <ul class="history-list" id="historyList">
+                        <li class="empty-state">Đang tải...</li>
+                    </ul>
+                </div>
+
+                <div class="profile-section">
+                    <div class="section-head">🔖 Truyện đã bookmark</div>
+                    <ul class="history-list" id="bookmarkList">
+                        <li class="empty-state">Đang tải...</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        if (!user) location.href = 'auth.html';
+
+        async function loadProfile() {
+            // Fetch fresh data từ server
+            let u = user;
+            try {
+                const res = await fetch(`/users/${user._id}`);
+                if (res.ok) {
+                    u = await res.json();
+                    localStorage.setItem('user', JSON.stringify(u));
+                }
+            } catch { }
+
+            document.getElementById('profileName').textContent = u.username;
+            document.getElementById('profileEmail').textContent = u.email;
+            document.getElementById('profileBalance').textContent = '💰 Số dư: ' + (u.balance || 0).toLocaleString('vi-VN') + ' VNĐ';
+            document.getElementById('profileBadges').innerHTML = u.isVIP
+                ? '<span class="badge badge-vip">👑 VIP</span>'
+                : '<span class="badge badge-normal">Thành viên</span>';
+            if (u.isVIP) document.getElementById('vipBtn').style.display = 'none';
+
+            loadHistory(u);
+            loadBookmarks(u);
+        }
+
+        async function loadHistory(u) {
+            const list = document.getElementById('historyList');
+            if (!u.history || !u.history.length) {
+                list.innerHTML = '<li class="empty-state">Chưa có lịch sử đọc.</li>'; return;
+            }
+            // Lấy thông tin các chương đã đọc (tối đa 20 gần nhất)
+            const recent = u.history.slice(-20).reverse();
+            const items = await Promise.all(recent.map(async id => {
+                try {
+                    const res = await fetch(`/chapters/${id}`);
+                    if (!res.ok) return null;
+                    const c = await res.json();
+                    return `<li>
+            <div>
+              <a href="chapter.html?id=${c._id}">Chương ${c.number}: ${c.title}</a>
+              <div class="story-name"><a href="story.html?id=${c.storyId}" style="color:#555;text-decoration:none">Xem truyện →</a></div>
+            </div>
+          </li>`;
+                } catch { return null; }
+            }));
+            const html = items.filter(Boolean).join('');
+            list.innerHTML = html || '<li class="empty-state">Chưa có lịch sử đọc.</li>';
+        }
+
+        async function loadBookmarks(u) {
+            const list = document.getElementById('bookmarkList');
+            if (!u.bookmarks || !u.bookmarks.length) {
+                list.innerHTML = '<li class="empty-state">Chưa có truyện bookmark.</li>'; return;
+            }
+            const items = await Promise.all(u.bookmarks.map(async id => {
+                try {
+                    const res = await fetch(`/stories/${id}`);
+                    if (!res.ok) return null;
+                    const s = await res.json();
+                    return `<li>
+            <a href="story.html?id=${s._id}">${s.title} ${s.isVIP ? '<span class="vip-badge">VIP</span>' : ''}</a>
+            <span style="font-size:12px;color:#555">${s.totalChapters || 0} chương</span>
+          </li>`;
+                } catch { return null; }
+            }));
+            const html = items.filter(Boolean).join('');
+            list.innerHTML = html || '<li class="empty-state">Chưa có truyện bookmark.</li>';
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            location.href = 'auth.html';
+        }
+
+        loadProfile();
+    </script>
+</body>
+
+</html>

@@ -24,6 +24,7 @@
           <option value="Đô Thị">Đô Thị</option>
         </select>
         <a href="payment.html" class="nav-vip-btn">👑 VIP</a>
+        <div id="navUser"></div>
       </div>
     </nav>
   </header>
@@ -224,6 +225,12 @@
       loadStories();
     }
     loadAds();
+
+    // Nav user
+    const _u = JSON.parse(localStorage.getItem('user') || 'null');
+    document.getElementById('navUser').innerHTML = _u
+      ? `<a href="profile.html" class="nav-user-btn">👤 ${_u.username}</a>`
+      : `<a href="auth.html" class="nav-user-btn">Đăng nhập</a>`;
 
     // Footer shopee
     fetch('/ads').then(r => r.json()).then(ads => {
