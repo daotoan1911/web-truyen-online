@@ -159,27 +159,50 @@
                 <div class="auth-form">
                     <label>Tên hiển thị</label>
                     <input type="text" id="regUsername" placeholder="Tên của bạn">
-                    <label>Email</label>
-                    <input type="email" id="regEmail" placeholder="email@example.com">
+                    <label>Email Gmail</label>
+                    <input type="email" id="regEmail" placeholder="example@gmail.com">
                     <label>Mật khẩu</label>
                     <input type="password" id="regPassword" placeholder="Tối thiểu 6 ký tự">
                     <div class="auth-error" id="registerError"></div>
                     <div class="auth-success" id="registerSuccess"></div>
-                    <button class="auth-btn" onclick="doRegister()">Tạo tài khoản</button>
+                    <button class="auth-btn" id="regBtn" onclick="doRegister()">Tạo tài khoản</button>
+                </div>
+            </div>
+
+            <!-- BƯỚC 2: NHẬP OTP -->
+            <div id="otpForm" style="display:none">
+                <div style="text-align:center;margin-bottom:20px">
+                    <div style="font-size:40px;margin-bottom:8px">📧</div>
+                    <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:6px">Kiểm tra email của bạn
+                    </div>
+                    <div style="font-size:13px;color:#666" id="otpEmailHint"></div>
+                </div>
+                <div class="auth-form">
+                    <label>Mã OTP (6 số)</label>
+                    <input type="text" id="otpInput" placeholder="_ _ _ _ _ _" maxlength="6"
+                        style="text-align:center;font-size:24px;font-weight:800;letter-spacing:8px">
+                    <div class="auth-error" id="otpError"></div>
+                    <button class="auth-btn" onclick="doVerifyOTP()">✅ Xác nhận</button>
+                    <button class="auth-btn" onclick="doResendOTP()"
+                        style="background:#2a2a40;color:#aaa;margin-top:-8px" id="resendBtn">
+                        Gửi lại OTP
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Nếu đã đăng nhập thì redirect về profile
         if (localStorage.getItem('user')) location.href = 'profile.html';
+
+        let pendingEmail = '';
 
         function switchTab(tab, btn) {
             document.querySelectorAll('.auth-tab').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
             document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+            document.getElementById('otpForm').style.display = 'none';
         }
 
         async function doLogin() {
@@ -189,17 +212,14 @@
             if (!email || !password) { document.getElementById('loginError').textContent = 'Vui lòng nhập đầy đủ.'; return; }
             try {
                 const res = await fetch('/users/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
                 if (!res.ok) { document.getElementById('loginError').textContent = await res.text(); return; }
                 const data = await res.json();
                 localStorage.setItem('user', JSON.stringify(data.user));
                 location.href = 'profile.html';
-            } catch {
-                document.getElementById('loginError').textContent = 'Lỗi kết nối server.';
-            }
+            } catch { document.getElementById('loginError').textContent = 'Lỗi kết nối server.'; }
         }
 
         async function doRegister() {
@@ -210,24 +230,70 @@
             document.getElementById('registerSuccess').textContent = '';
             if (!username || !email || !password) { document.getElementById('registerError').textContent = 'Vui lòng nhập đầy đủ.'; return; }
             if (password.length < 6) { document.getElementById('registerError').textContent = 'Mật khẩu tối thiểu 6 ký tự.'; return; }
+
+            const btn = document.getElementById('regBtn');
+            btn.disabled = true; btn.textContent = 'Đang gửi...';
             try {
                 const res = await fetch('/users/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, email, password })
                 });
-                if (!res.ok) { document.getElementById('registerError').textContent = await res.text(); return; }
-                document.getElementById('registerSuccess').textContent = '✅ Đăng ký thành công! Đang chuyển hướng...';
-                setTimeout(() => switchTab('login', document.querySelectorAll('.auth-tab')[0]), 1200);
-            } catch {
-                document.getElementById('registerError').textContent = 'Lỗi kết nối server.';
-            }
+                if (!res.ok) { document.getElementById('registerError').textContent = await res.text(); btn.disabled = false; btn.textContent = 'Tạo tài khoản'; return; }
+                pendingEmail = email;
+                // Chuyển sang bước nhập OTP
+                document.getElementById('registerForm').style.display = 'none';
+                document.getElementById('otpForm').style.display = 'block';
+                document.getElementById('otpEmailHint').textContent = `Mã OTP đã gửi tới ${email}`;
+                document.getElementById('otpInput').focus();
+            } catch { document.getElementById('registerError').textContent = 'Lỗi kết nối server.'; }
+            btn.disabled = false; btn.textContent = 'Tạo tài khoản';
         }
 
-        // Enter để submit
+        async function doVerifyOTP() {
+            const otp = document.getElementById('otpInput').value.trim();
+            document.getElementById('otpError').textContent = '';
+            if (otp.length !== 6) { document.getElementById('otpError').textContent = 'Mã OTP gồm 6 số.'; return; }
+            try {
+                const res = await fetch('/users/verify-otp', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: pendingEmail, otp })
+                });
+                if (!res.ok) { document.getElementById('otpError').textContent = await res.text(); return; }
+                document.getElementById('otpError').style.color = '#4caf50';
+                document.getElementById('otpError').textContent = '✅ Xác nhận thành công! Đang chuyển hướng...';
+                setTimeout(() => switchTab('login', document.querySelectorAll('.auth-tab')[0]), 1200);
+            } catch { document.getElementById('otpError').textContent = 'Lỗi kết nối server.'; }
+        }
+
+        async function doResendOTP() {
+            const btn = document.getElementById('resendBtn');
+            btn.disabled = true; btn.textContent = 'Đang gửi...';
+            // Gửi lại bằng cách register lại với cùng data (server sẽ update OTP)
+            document.getElementById('otpError').textContent = '';
+            try {
+                await fetch('/users/register', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: document.getElementById('regUsername').value,
+                        email: pendingEmail,
+                        password: document.getElementById('regPassword').value
+                    })
+                });
+                document.getElementById('otpError').style.color = '#4caf50';
+                document.getElementById('otpError').textContent = '✅ Đã gửi lại OTP.';
+            } catch { }
+            // Cooldown 30s
+            let s = 30;
+            const t = setInterval(() => {
+                btn.textContent = `Gửi lại (${--s}s)`;
+                if (s <= 0) { clearInterval(t); btn.disabled = false; btn.textContent = 'Gửi lại OTP'; }
+            }, 1000);
+        }
+
         document.addEventListener('keydown', e => {
             if (e.key !== 'Enter') return;
-            if (document.getElementById('loginForm').style.display !== 'none') doLogin();
+            if (document.getElementById('otpForm').style.display !== 'none') doVerifyOTP();
+            else if (document.getElementById('loginForm').style.display !== 'none') doLogin();
             else doRegister();
         });
     </script>

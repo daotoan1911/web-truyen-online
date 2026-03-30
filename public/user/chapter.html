@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đọc chương - WebTruyenChu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -153,11 +155,14 @@
       try {
         const res = await fetch('/ads');
         const ads = await res.json();
+        const el = document.getElementById('ad-sidebar');
+        if (!el) return;
         if (ads.sidebar && ads.sidebar.url) {
-          document.getElementById('ad-sidebar').innerHTML =
-            `<a href="${ads.sidebar.url}" target="_blank" rel="noopener" class="ad-banner">
-              ${ads.sidebar.imageUrl ? `<img src="${ads.sidebar.imageUrl}" alt="Quảng cáo">` : '📢 Quảng cáo'}
-            </a>`;
+          el.innerHTML = ads.sidebar.imageUrl
+            ? `<a href="${ads.sidebar.url}" target="_blank" rel="noopener sponsored">
+                <img src="${ads.sidebar.imageUrl}" alt="Quảng cáo" style="max-width:336px;width:100%;height:auto;display:block;border-radius:8px;margin:0 auto">
+               </a>`
+            : `<a href="${ads.sidebar.url}" target="_blank" rel="noopener sponsored" class="ad-banner">📢 Quảng cáo</a>`;
         }
       } catch { }
     }

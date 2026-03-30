@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WebTruyenChu - Trang chủ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -45,8 +47,10 @@
     </nav>
   </header>
 
+  <!-- Banner top: full width, ngoài container -->
+  <div id="ad-banner-top" class="ad-banner-fullwidth"></div>
+
   <div class="container">
-    <div id="ad-banner-top"></div>
     <div class="page-title" id="pageTitle">📚 Danh sách truyện</div>
     <div id="storyList" class="grid"></div>
     <div id="pagination" class="pagination"></div>
@@ -231,13 +235,24 @@
           if (!el) return;
           const ad = ads[key];
           if (ad && ad.url) {
-            const img = ad.imageUrl ? `<img src="${ad.imageUrl}" alt="QC">` : (key === 'shopee' ? '🛒 Mua sắm trên Shopee' : '📢 Quảng cáo');
-            el.innerHTML = `<a href="${ad.url}" target="_blank" rel="noopener sponsored" class="${key === 'shopee' ? 'shopee-banner' : 'ad-banner'}">${img}</a>`;
+            const isTop = key === 'banner_top';
+            const isShopee = key === 'shopee';
+            if (isTop && ad.imageUrl) {
+              // Banner top: full width, không bọc class ad-banner
+              el.innerHTML = `<a href="${ad.url}" target="_blank" rel="noopener sponsored"><img src="${ad.imageUrl}" alt="Quảng cáo" style="width:100%;height:auto;display:block"></a>`;
+            } else if (isShopee) {
+              el.innerHTML = `<a href="${ad.url}" target="_blank" rel="noopener sponsored" class="shopee-banner">${ad.imageUrl ? `<img src="${ad.imageUrl}" alt="Shopee">` : '🛒 Mua sắm trên Shopee'}</a>`;
+            } else {
+              // Banner bottom: ảnh full width trong container
+              el.innerHTML = ad.imageUrl
+                ? `<a href="${ad.url}" target="_blank" rel="noopener sponsored"><img src="${ad.imageUrl}" alt="Quảng cáo" style="width:100%;height:auto;display:block;border-radius:8px;max-height:100px;object-fit:cover"></a>`
+                : `<a href="${ad.url}" target="_blank" rel="noopener sponsored" class="ad-banner">📢 Quảng cáo</a>`;
+            }
           } else {
-            // Placeholder khi chưa có link
-            el.innerHTML = key === 'shopee'
-              ? `<a href="http://localhost:5000/admin.html" class="shopee-banner" style="opacity:0.3">🛒 [Chưa cấu hình Shopee - vào Admin để thêm link]</a>`
-              : `<div class="ad-placeholder">[Vị trí quảng cáo - ${key}]</div>`;
+            if (key !== 'banner_top') // ẩn placeholder banner top nếu chưa có
+              el.innerHTML = key === 'shopee'
+                ? `<a href="#" class="shopee-banner" style="opacity:0.3">🛒 [Chưa cấu hình Shopee]</a>`
+                : `<div class="ad-placeholder">[Vị trí quảng cáo - ${key}]</div>`;
           }
         });
       } catch { }

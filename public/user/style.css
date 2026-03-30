@@ -5,10 +5,14 @@
 }
 
 body {
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   background: #0f0f1a;
   color: #e0e0e0;
   min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ===== HEADER ===== */
@@ -1058,4 +1062,367 @@ header nav {
   .float-ad-banner {
     width: 200px;
   }
+}
+
+/* ===== TYPOGRAPHY SCALE (Google/Material) ===== */
+/* Display */
+h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Body */
+p {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: #c0c0c0;
+}
+
+/* Labels / captions */
+small,
+.caption {
+  font-size: 0.8125rem;
+  color: #888;
+  line-height: 1.5;
+}
+
+/* Page title */
+.page-title {
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+/* Story card */
+.story-card-body h3 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.story-card-body .meta {
+  font-size: 0.8125rem;
+  color: #888;
+}
+
+.story-card-body p {
+  font-size: 0.8125rem;
+  color: #999;
+  line-height: 1.5;
+}
+
+/* Chapter reader — tối ưu cho đọc dài */
+.chapter-reader h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.chapter-body {
+  font-size: 1.0625rem;
+  /* 17px */
+  line-height: 1.95;
+  color: #d4d4d4;
+  letter-spacing: 0.01em;
+  word-spacing: 0.05em;
+}
+
+/* Story detail */
+.story-meta h2 {
+  font-size: 1.375rem;
+  font-weight: 800;
+}
+
+.story-meta p {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+/* Chapter list */
+.chapter-list li a {
+  font-size: 0.9375rem;
+}
+
+/* Comments */
+.comment-header b {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.comment-time {
+  font-size: 0.75rem;
+}
+
+.comment p {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+/* Nav */
+.logo {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.nav-vip-btn {
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.nav-user-btn {
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+/* Breadcrumb */
+#breadcrumb {
+  font-size: 0.8125rem;
+}
+
+/* Section title */
+.section-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+/* Footer */
+.footer-logo {
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+
+.footer-heading {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.footer-col ul li a {
+  font-size: 0.875rem;
+}
+
+.footer-bottom {
+  font-size: 0.75rem;
+}
+
+/* Pagination */
+.page-btn {
+  font-size: 0.875rem;
+}
+
+.page-info {
+  font-size: 0.8125rem;
+}
+
+/* VIP gate */
+.vip-gate-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.vip-gate p {
+  font-size: 0.9375rem;
+}
+
+.vip-gate-btn {
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+/* ===== AD BANNER AUTO SIZE ===== */
+.ad-banner {
+  display: block;
+  width: 100%;
+  background: #1a1a2e;
+  border: 1px dashed #2a2a40;
+  border-radius: 8px;
+  text-align: center;
+  padding: 0;
+  /* bỏ padding để ảnh full */
+  color: #555;
+  font-size: 13px;
+  text-decoration: none;
+  transition: border-color 0.2s;
+  overflow: hidden;
+}
+
+.ad-banner:hover {
+  border-color: #e94560;
+}
+
+/* Ảnh tự co theo tỉ lệ thật, full width */
+.ad-banner img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+/* Khi chỉ có text (chưa có ảnh) */
+.ad-banner:not(:has(img)) {
+  padding: 14px;
+}
+
+/* Fix banner không thừa hai bên */
+.ad-banner {
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ad-banner img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  border-radius: 8px;
+}
+
+/* Nếu ảnh có nền trắng thừa hai bên — dùng cover để crop */
+/* Bỏ comment dòng dưới nếu muốn crop thay vì contain */
+/* .ad-banner img { object-fit: cover !important; max-height: 120px !important; } */
+
+/* Banner full width — ra ngoài container */
+.ad-banner-fullwidth {
+  width: 100%;
+  margin-bottom: 0;
+  line-height: 0;
+  /* bỏ khoảng trắng dưới ảnh */
+}
+
+.ad-banner-fullwidth a {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+}
+
+.ad-banner-fullwidth img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+.ad-banner-fullwidth .ad-placeholder {
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+}
+
+/* ===== AD SLOTS CHUẨN HÓA ===== */
+
+/* Banner top — full width ngoài container */
+.ad-banner-fullwidth a {
+  display: block;
+  width: 100%;
+}
+
+.ad-banner-fullwidth img {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 160px;
+  object-fit: cover;
+}
+
+/* Banner bottom — trong container, full width */
+#ad-banner-bottom a {
+  display: block;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#ad-banner-bottom img {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+#ad-banner-bottom .ad-banner {
+  padding: 0;
+}
+
+/* Sidebar chapter — centered, max 336px */
+#ad-sidebar {
+  text-align: center;
+  margin: 20px 0;
+}
+
+#ad-sidebar a {
+  display: inline-block;
+  max-width: 336px;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#ad-sidebar img {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 280px;
+  object-fit: cover;
+}
+
+#ad-sidebar .ad-banner {
+  padding: 0;
+  max-width: 336px;
+  margin: 0 auto;
+}
+
+/* Shopee footer — full width, compact */
+.shopee-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #ee4d2d22, #ee4d2d11);
+  border: 1px solid #ee4d2d55;
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: #ee4d2d;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background .2s;
+  width: 100%;
+}
+
+.shopee-banner:hover {
+  background: linear-gradient(135deg, #ee4d2d33, #ee4d2d22);
+}
+
+.shopee-banner img {
+  max-height: 36px;
+  width: auto;
+  object-fit: contain;
 }
