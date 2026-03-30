@@ -8,7 +8,14 @@ const connectDB = require('./config/db');
 const app = express();
 connectDB();
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        'http://localhost:5000',
+        'https://admin-truyen-mocha.vercel.app',
+        /\.vercel\.app$/  // cho phép tất cả subdomain vercel
+    ],
+    credentials: true
+}));
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public/user')));
