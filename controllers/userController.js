@@ -1,6 +1,5 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-const { sendOTP } = require('../config/mailer');
 
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -34,6 +33,7 @@ exports.register = async (req, res) => {
       await User.create({ username, email, passwordHash, otp, otpExpiry, isVerified: false });
     }
 
+    const { sendOTP } = require('../config/mailer');
     await sendOTP(email, otp);
     res.json({ message: 'OTP đã gửi về email. Vui lòng kiểm tra hộp thư.', email });
   } catch (err) {
