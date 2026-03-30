@@ -78,10 +78,11 @@ exports.login = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select('-passwordHash -otp -otpExpiry').sort({ createdAt: -1 });
+    const users = await User.find().select('-passwordHash -otp -otpExpiry').sort({ createdAt: -1 }).maxTimeMS(10000);
     res.json(users);
   } catch (err) {
-    res.status(500).send(err.message);
+    console.error('getAllUsers error:', err.message);
+    res.status(500).json({ error: err.message });
   }
 };
 
