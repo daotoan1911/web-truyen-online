@@ -190,6 +190,13 @@
     }).catch(() => { });
   </script>
   <script src="floatAd.js"></script>
+  <script>
+    document.addEventListener('contextmenu', e => { if (e.target.closest('.chapter-body')) e.preventDefault(); });
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && ['c', 'a', 'u'].includes(e.key.toLowerCase())) e.preventDefault();
+    });
+    document.addEventListener('copy', e => e.preventDefault());
+  </script>
 </body>
 
 </html>

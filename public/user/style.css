@@ -1426,3 +1426,11 @@ small,
   width: auto;
   object-fit: contain;
 }
+
+/* ===== CHẶN COPY NỘI DUNG TRUYỆN ===== */
+.chapter-body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
