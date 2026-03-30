@@ -1,10 +1,8 @@
 const Ad = require('../models/Ad');
 
-// Lấy tất cả ads (public - chỉ active)
 exports.getAds = async (req, res) => {
     try {
         const ads = await Ad.find({ isActive: true });
-        // Trả về object keyed by slot để frontend dùng dễ
         const result = {};
         ads.forEach(a => { result[a.slot] = a; });
         res.json(result);
@@ -13,7 +11,6 @@ exports.getAds = async (req, res) => {
     }
 };
 
-// Lấy tất cả ads cho admin (kể cả inactive)
 exports.getAllAds = async (req, res) => {
     try {
         const ads = await Ad.find();
@@ -23,7 +20,6 @@ exports.getAllAds = async (req, res) => {
     }
 };
 
-// Upsert ad theo slot
 exports.upsertAd = async (req, res) => {
     try {
         const { slot, label, url, imageUrl, isActive } = req.body;

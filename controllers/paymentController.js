@@ -1,9 +1,8 @@
 const User = require('../models/User');
 
-const VIP_PRICE = 50000;   // 50.000 VNĐ / 30 ngày
+const VIP_PRICE = 50000;
 const VIP_DAYS = 30;
 
-// Nạp tiền vào ví
 exports.donate = async (req, res) => {
     try {
         const { userId, amount } = req.body;
@@ -20,7 +19,6 @@ exports.donate = async (req, res) => {
     }
 };
 
-// Mua VIP bằng số dư ví
 exports.upgradeVIP = async (req, res) => {
     try {
         const { userId } = req.body;
@@ -36,7 +34,6 @@ exports.upgradeVIP = async (req, res) => {
             });
         }
 
-        // Tính ngày hết hạn — nếu đang còn VIP thì cộng thêm 30 ngày
         const now = new Date();
         const base = (user.vipExpiry && user.vipExpiry > now) ? user.vipExpiry : now;
         const newExpiry = new Date(base.getTime() + VIP_DAYS * 24 * 60 * 60 * 1000);
@@ -60,7 +57,6 @@ exports.upgradeVIP = async (req, res) => {
     }
 };
 
-// Middleware tự động check & thu hồi VIP hết hạn
 exports.checkVIPExpiry = async (userId) => {
     try {
         const user = await User.findById(userId).select('isVIP vipExpiry');

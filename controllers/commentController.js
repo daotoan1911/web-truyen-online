@@ -1,6 +1,5 @@
 const Comment = require('../models/Comment');
 
-// Lấy comment theo chapterId (query param)
 exports.getCommentsByChapter = async (req, res) => {
   try {
     const { chapterId } = req.query;
@@ -13,7 +12,6 @@ exports.getCommentsByChapter = async (req, res) => {
   }
 };
 
-// Thêm comment mới
 exports.addComment = async (req, res) => {
   try {
     const { chapterId, userId, content, rating } = req.body;
@@ -25,7 +23,6 @@ exports.addComment = async (req, res) => {
   }
 };
 
-// Xoá comment
 exports.deleteComment = async (req, res) => {
   try {
     await Comment.findByIdAndDelete(req.params.id);

@@ -1,4 +1,3 @@
-// Load .env trước tất cả
 require('dotenv').config();
 
 const express = require('express');
@@ -9,13 +8,11 @@ const connectDB = require('./config/db');
 const app = express();
 connectDB();
 
-app.use(cors()); // cho phép admin app gọi API
+app.use(cors());
 app.use(express.json());
 
-// Static user frontend
 app.use(express.static(path.join(__dirname, 'public/user')));
 
-// API routes
 app.use('/stories', require('./routers/storyRoutes'));
 app.use('/chapters', require('./routers/chapterRoutes'));
 app.use('/comments', require('./routers/commentRoutes'));

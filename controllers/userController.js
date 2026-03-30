@@ -2,17 +2,14 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const { sendOTP } = require('../config/mailer');
 
-// Validate email format
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-// Generate 6-digit OTP
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-// Đăng ký — tạo user chưa verified, gửi OTP
 exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -24,11 +21,10 @@ exports.register = async (req, res) => {
     if (existing && existing.isVerified) return res.status(400).send('Email đã được sử dụng');
 
     const otp = generateOTP();
-    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 phút
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
     const passwordHash = await bcrypt.hash(password, 10);
 
     if (existing && !existing.isVerified) {
-      // Cập nhật lại OTP nếu đã đăng ký nhưng chưa verify
       existing.username = username;
       existing.passwordHash = passwordHash;
       existing.otp = otp;
@@ -45,7 +41,6 @@ exports.register = async (req, res) => {
   }
 };
 
-// Xác nhận OTP
 exports.verifyOTP = async (req, res) => {
   try {
     const { email, otp } = req.body;
@@ -66,7 +61,6 @@ exports.verifyOTP = async (req, res) => {
   }
 };
 
-// Đăng nhập
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -82,7 +76,6 @@ exports.login = async (req, res) => {
   }
 };
 
-// Lấy tất cả users (admin)
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select('-passwordHash -otp -otpExpiry').sort({ createdAt: -1 });
@@ -92,10 +85,9 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-// Admin cấp/thu hồi VIP
 exports.adminToggleVIP = async (req, res) => {
   try {
-    const { action } = req.body; // 'grant' | 'revoke'
+    const { action } = req.body;
     const update = action === 'grant'
       ? { isVIP: true, vipExpiry: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) }
       : { isVIP: false, vipExpiry: null };
@@ -107,7 +99,6 @@ exports.adminToggleVIP = async (req, res) => {
   }
 };
 
-// Admin xoá user
 exports.deleteUser = async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
@@ -116,11 +107,11 @@ exports.deleteUser = async (req, res) => {
     res.status(500).send(err.message);
   }
 };
+
 exports.getUserById = async (req, res) => {
   try {
     let user = await User.findById(req.params.id).select('-passwordHash');
     if (!user) return res.status(404).send('Không tìm thấy user');
-    // Tự động thu hồi VIP hết hạn
     if (user.isVIP && user.vipExpiry && user.vipExpiry < new Date()) {
       user = await User.findByIdAndUpdate(req.params.id, { isVIP: false }, { new: true }).select('-passwordHash');
     }
@@ -130,7 +121,6 @@ exports.getUserById = async (req, res) => {
   }
 };
 
-// Lưu lịch sử đọc
 exports.addHistory = async (req, res) => {
   try {
     const { chapterId } = req.body;
@@ -145,7 +135,6 @@ exports.addHistory = async (req, res) => {
   }
 };
 
-// Bookmark truyện
 exports.addBookmark = async (req, res) => {
   try {
     const { storyId } = req.body;
