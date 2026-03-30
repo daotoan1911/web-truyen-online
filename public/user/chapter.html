@@ -12,6 +12,7 @@
   <header>
     <nav>
       <a href="index.html" class="logo">📖 WebTruyenChu</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-right').classList.toggle('open')">☰</button>
       <div class="nav-right">
         <a href="payment.html" class="nav-vip-btn">👑 VIP</a>
         <div id="navUser"></div>
@@ -183,6 +184,7 @@
       el.innerHTML = ad && ad.url ? `<a href="${ad.url}" target="_blank" rel="noopener sponsored" class="shopee-banner">${ad.imageUrl ? `<img src="${ad.imageUrl}" alt="Shopee">` : '🛒 Mua sắm trên Shopee'}</a>` : `<a href="#" class="shopee-banner" style="opacity:0.25">🛒 Shopee (chưa cấu hình)</a>`;
     }).catch(() => { });
   </script>
+  <script src="floatAd.js"></script>
 </body>
 
 </html>

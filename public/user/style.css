@@ -15,7 +15,7 @@ body {
 header {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   border-bottom: 2px solid #e94560;
-  padding: 0 24px;
+  padding: 0 16px;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -29,43 +29,57 @@ header nav {
   align-items: center;
   justify-content: space-between;
   height: 60px;
-  gap: 16px;
+  gap: 12px;
 }
 
 .logo {
   color: #e94560;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 800;
   text-decoration: none;
   letter-spacing: 1px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .logo:hover {
   color: #ff6b81;
 }
 
+/* Hamburger button - chỉ hiện trên mobile */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #e0e0e0;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px 8px;
+  flex-shrink: 0;
+}
+
 .nav-right {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 8px;
   flex: 1;
   justify-content: flex-end;
 }
 
 .nav-right input,
 .nav-right select {
-  padding: 8px 14px;
+  padding: 7px 12px;
   border-radius: 20px;
   border: 1px solid #333;
   background: #1e1e30;
   color: #e0e0e0;
-  font-size: 14px;
+  font-size: 13px;
   outline: none;
   transition: border 0.2s;
 }
 
 .nav-right input {
-  width: 240px;
+  width: 200px;
 }
 
 .nav-right input:focus,
@@ -74,7 +88,7 @@ header nav {
 }
 
 .nav-vip-btn {
-  padding: 7px 16px;
+  padding: 6px 14px;
   background: linear-gradient(135deg, #f7971e, #ffd200);
   color: #333;
   font-weight: 800;
@@ -83,6 +97,7 @@ header nav {
   text-decoration: none;
   white-space: nowrap;
   transition: opacity 0.2s;
+  flex-shrink: 0;
 }
 
 .nav-vip-btn:hover {
@@ -90,7 +105,7 @@ header nav {
 }
 
 .nav-user-btn {
-  padding: 7px 14px;
+  padding: 6px 12px;
   background: #1a1a2e;
   color: #ccc;
   font-size: 13px;
@@ -100,12 +115,99 @@ header nav {
   border: 1px solid #2a2a40;
   white-space: nowrap;
   transition: all .2s;
+  flex-shrink: 0;
 }
 
 .nav-user-btn:hover {
   border-color: #e94560;
   color: #e94560;
 }
+
+/* ===== MOBILE NAV ===== */
+/* Search bar luôn hiện dưới header trên mobile */
+.nav-search-bar {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  header {
+    padding: 0;
+  }
+
+  header nav {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 0;
+    gap: 0;
+  }
+
+  .logo {
+    font-size: 17px;
+    padding: 0 12px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+  }
+
+  .nav-toggle {
+    display: block;
+    margin-right: 12px;
+  }
+
+  /* Search bar luôn hiện ngay dưới header */
+  .nav-search-bar {
+    display: flex;
+    width: 100%;
+    padding: 8px 12px 10px;
+    background: #0f0f1a;
+    border-top: 1px solid #1a1a2e;
+    gap: 8px;
+    order: 3;
+  }
+
+  .nav-search-bar input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .nav-search-bar select {
+    width: 130px;
+    flex-shrink: 0;
+  }
+
+  /* VIP + user dropdown */
+  .nav-right {
+    display: none;
+    width: 100%;
+    background: #16213e;
+    border-top: 1px solid #2a2a40;
+    flex-direction: row;
+    justify-content: center;
+    padding: 10px 12px;
+    gap: 10px;
+    order: 4;
+  }
+
+  .nav-right.open {
+    display: flex;
+  }
+
+  .nav-right input,
+  .nav-right select {
+    display: none !important;
+  }
+
+  .nav-vip-btn {
+    flex: 1;
+    text-align: center;
+  }
+
+  .nav-user-btn {
+    flex: 1;
+    text-align: center;
+  }
+}
+
 
 /* ===== CONTAINER ===== */
 .container {
@@ -679,11 +781,73 @@ header nav {
   .footer-inner {
     grid-template-columns: 1fr 1fr;
   }
+
+  .story-info {
+    flex-direction: column;
+  }
+
+  .cover-img {
+    width: 120px;
+    height: 170px;
+    align-self: center;
+  }
+
+  .chapter-list {
+    grid-template-columns: 1fr;
+  }
+
+  #chapterNav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #chapterNav a {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+  }
+
+  .chapter-reader {
+    padding: 20px 14px;
+  }
+
+  .chapter-body {
+    font-size: 15px;
+  }
+
+  .container {
+    padding: 0 12px;
+    margin: 16px auto;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
 }
 
 @media (max-width: 480px) {
   .footer-inner {
     grid-template-columns: 1fr;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .story-card-body h3 {
+    font-size: 13px;
+  }
+
+  .pagination {
+    gap: 4px;
+  }
+
+  .page-btn {
+    min-width: 32px;
+    height: 32px;
+    font-size: 13px;
   }
 }
 
@@ -751,4 +915,147 @@ header nav {
 
 .vip-gate-login:hover {
   text-decoration: underline;
+}
+
+/* ===== FLOATING AD ===== */
+.float-ad-wrap {
+  position: fixed;
+  right: 16px;
+  bottom: 80px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* Icon nhỏ luôn hiện */
+.float-ad-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #e94560, #c73652);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(233, 69, 96, .5);
+  animation: float-bounce 2s ease-in-out infinite;
+  font-size: 22px;
+  border: 2px solid #ff6b81;
+  transition: transform .2s;
+  text-decoration: none;
+}
+
+.float-ad-icon:hover {
+  transform: scale(1.1);
+}
+
+@keyframes float-bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* Banner popup */
+.float-ad-banner {
+  background: #1a1a2e;
+  border: 1px solid #e94560;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .6);
+  width: 240px;
+  animation: fade-in-up .25s ease;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.float-ad-banner-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #e94560;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.float-ad-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.float-ad-close:hover {
+  opacity: .7;
+}
+
+.float-ad-banner-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.float-ad-banner-body a {
+  display: block;
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: opacity .2s;
+}
+
+.float-ad-banner-body a:hover {
+  opacity: .85;
+}
+
+.float-ad-banner-body img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  display: block;
+  border-radius: 8px;
+}
+
+.float-ad-text-link {
+  padding: 10px 12px;
+  background: linear-gradient(135deg, #f7971e22, #ffd20022);
+  border: 1px solid #ffd20055;
+  border-radius: 8px;
+  color: #ffd200;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .float-ad-wrap {
+    right: 10px;
+    bottom: 70px;
+  }
+
+  .float-ad-banner {
+    width: 200px;
+  }
 }

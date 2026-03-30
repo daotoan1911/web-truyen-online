@@ -12,9 +12,11 @@
   <header>
     <nav>
       <a href="index.html" class="logo">📖 WebTruyenChu</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-right').classList.toggle('open')">☰</button>
+
+      <!-- Desktop: search trong nav-right | Mobile: search ra nav-search-bar -->
       <div class="nav-right">
-        <input type="text" id="searchBox" placeholder="🔍 Tìm kiếm truyện..."
-          onkeydown="if(event.key==='Enter') doSearch()">
+        <input type="text" id="searchBox" placeholder="🔍 Tìm kiếm..." onkeydown="if(event.key==='Enter') doSearch()">
         <select id="genreFilter" onchange="filterByGenre()">
           <option value="">Tất cả thể loại</option>
           <option value="Tiên Hiệp">Tiên Hiệp</option>
@@ -25,6 +27,20 @@
         </select>
         <a href="payment.html" class="nav-vip-btn">👑 VIP</a>
         <div id="navUser"></div>
+      </div>
+
+      <!-- Mobile only: search bar luôn hiện -->
+      <div class="nav-search-bar">
+        <input type="text" id="searchBoxMobile" placeholder="🔍 Tìm kiếm..."
+          onkeydown="if(event.key==='Enter') doSearchMobile()">
+        <select id="genreFilterMobile" onchange="filterByGenreMobile()">
+          <option value="">Tất cả</option>
+          <option value="Tiên Hiệp">Tiên Hiệp</option>
+          <option value="Ngôn Tình">Ngôn Tình</option>
+          <option value="Kiếm Hiệp">Kiếm Hiệp</option>
+          <option value="Huyền Huyễn">Huyền Huyễn</option>
+          <option value="Đô Thị">Đô Thị</option>
+        </select>
       </div>
     </nav>
   </header>
@@ -178,11 +194,23 @@
       loadStories(`/stories/search?q=${encodeURIComponent(q)}`);
     }
 
+    function doSearchMobile() {
+      const q = document.getElementById('searchBoxMobile').value.trim();
+      document.getElementById('searchBox').value = q;
+      doSearch();
+    }
+
     function filterByGenre() {
       const genre = document.getElementById('genreFilter').value;
       cacheKey = ''; cachedStories = [];
       document.getElementById('pageTitle').textContent = genre ? `📂 Thể loại: ${genre}` : '📚 Danh sách truyện';
       loadStories(genre ? `/stories?genre=${encodeURIComponent(genre)}` : '/stories');
+    }
+
+    function filterByGenreMobile() {
+      const genre = document.getElementById('genreFilterMobile').value;
+      document.getElementById('genreFilter').value = genre;
+      filterByGenre();
     }
 
     // Ads
@@ -242,6 +270,7 @@
         : `<a href="#" class="shopee-banner" style="opacity:0.25">🛒 Shopee (chưa cấu hình)</a>`;
     }).catch(() => { });
   </script>
+  <script src="floatAd.js"></script>
 </body>
 
 </html>

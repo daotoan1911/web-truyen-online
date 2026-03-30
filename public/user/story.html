@@ -12,6 +12,7 @@
   <header>
     <nav>
       <a href="index.html" class="logo">📖 WebTruyenChu</a>
+      <button class="nav-toggle" onclick="document.querySelector('.nav-right').classList.toggle('open')">☰</button>
       <div class="nav-right">
         <a href="payment.html" class="nav-vip-btn">👑 VIP</a>
         <div id="navUser"></div>
@@ -107,6 +108,7 @@
       ? `<a href="profile.html" class="nav-user-btn">👤 ${_u.username}</a>`
       : `<a href="auth.html" class="nav-user-btn">Đăng nhập</a>`;
   </script>
+  <script src="floatAd.js"></script>
 </body>
 
 </html>
